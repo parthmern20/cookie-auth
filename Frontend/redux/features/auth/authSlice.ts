@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { AUTH_STORAGE_KEY } from "@/lib/constants"
 import { cookies } from "next/headers"
+import Cookies from 'js-cookie';
 
 export interface User {
   id: string
@@ -147,12 +148,15 @@ const authSlice = createSlice({
 
       safeLocalStorage.removeItem(AUTH_STORAGE_KEY)
 
+      Cookies.remove("auth_token")
+      Cookies.remove("user_role")
+
       // Call logout API to clear cookies
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
-      fetch(`${apiUrl}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      }).catch((err) => console.error("Logout error:", err))
+      // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
+      // fetch(`${apiUrl}/auth/logout`, {
+      //   method: "POST",
+      //   credentials: "include",
+      // }).catch((err) => console.error("Logout error:", err))
     },
     clearError: (state) => {
       state.error = null
